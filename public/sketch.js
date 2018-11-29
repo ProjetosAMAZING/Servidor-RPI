@@ -768,9 +768,12 @@ function setup(){
 	check = select('#sw');
 	
 
-
+// connect socket ao servidor
 	socket = io.connect('192.168.137.50:3000');
-	socket.on('rcvRF',function(msg){
+
+
+
+	socket.on('rcvRF',function(msg){ // Mensagem recebida e colocar nas variáveis pretendidas.
 		var int8view = new Uint8Array(msg);
 		carstats.velc = int(int8view[4]);
 		carstats.sent = int8view[5];
@@ -792,20 +795,23 @@ function setup(){
 		console.log(carstats.lat + " " + carstats.lg + " " + carstats.gpst + " "  + "  " + teta*180/PI + " " + carstats.gpspd+ " " + carstats.sent);
 			
 	});
-	socket.on('timeout',function(){
+	socket.on('timeout',function(){ // recepção de um time out.
 			tout=1;
 		});
 	 
 	
-	cnv=createCanvas(w,h);
+	cnv=createCanvas(w,h); // create canvas
 	cnv.parent('#main_content');
 	
 }
 
 function draw(){
+  //cor backgorund.
 	background(238);
 	stroke(0,61,110);
+  // origem a ser o centro da canvas
 	translate(350,350);
+  // linha de sepração dos botões com o circuito.
 	line(-350,-350,-350,350);
 	
 	
@@ -817,13 +823,14 @@ function draw(){
 
 
 	image(img,-17,-150);
-
+  //Velocidade.
 	text(carstats.velc,0,0);
 	fill(0,61,110);
 	strokeWeight(2);
 	textSize(25);
 	text("km/h",0,30);
 	
+  //Estado GPS
 	image(img5,-60,50);
 	strokeWeight(1);
 	textSize(15);
@@ -838,7 +845,7 @@ function draw(){
 	else
 		text("NONE",0,75);
 		
-		
+		//Estado da comunicação.
 	image(img2,-60,90);
 		text(carstats.bat,0,115);
 		text("V",15,115);
@@ -848,7 +855,9 @@ function draw(){
 			image(img3,-15,140);
 	
 	fill(255);
+  //circuito.
 	printCircuit();
+  //cursor.
 	printCar();
 //	if(z>= x.length)
 //		z = 0;
@@ -861,6 +870,8 @@ function printCar(){
 	 strokeWeight(5);
 	 fill(226,21,47);
 	var k  = 0;
+
+  //procura do ponto mais proximo.
 	for(k = 0; k<y.length; k++)
 	{
 		if(x[k]>teta)
@@ -869,19 +880,12 @@ function printCar(){
 		break;
 		}
 	}
-	//console.log(teta);
-//	console.log(x[i]);
-	//arc(y[k]*cos(x[k]*180/PI)*1200,y[k]*sin(x[k]*180/PI)*1200,20,20,0,2*PI);
-	//console.log("x :" + y[i]*cos(x[i]*180/PI)*1200);
-	//console.log("y :" + y[i]*sin(x[i]*180/PI)*1200);
-	//arc(y[i]*cos(x[i])*1200,y[i]*sin(x[i]),20,20,0,2*PI);
-//	 arc(spline(angl,x,y)*cos(angl)*1200,spline(angl,x,y)*sin(angl)*1200,20,20,0,2*PI);
  }
 
 
 
 function printCircuit(){
-	
+	//imprimir o circuito, caso é necessário efetuar uma rotação trocar o angulo PI/2
 	var j = 0;
 	strokeWeight(10);
 	for(j ; j<x.length-1 ; j++)
@@ -891,7 +895,7 @@ function printCircuit(){
 
 
 
-
+// Caso exista mudança no estado do botão start
 function sendMessage(){
 	dataSend.speed= slide.value();
 	dataSend.sent = check.checked();
@@ -899,6 +903,7 @@ function sendMessage(){
 	socket.emit('carstate',dataSend);
 }
 
+// Caso exista mudança de stado no botão stop.
 function reset(){
 	slide.value(0);
 	rvalue.value(0);

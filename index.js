@@ -236,6 +236,7 @@
 				packet_received=0;
 				timeout = 0;
 				console.log("timeout"); // timeoutr apos 30 mensagens enviadas sem sucesso
+				io.emit('timeout',/**/); // enviar para o front end a ocorrênca de um timeout.
 			}
 		}
 		else
