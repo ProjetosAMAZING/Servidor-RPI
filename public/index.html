@@ -1,0 +1,66 @@
+<html>
+
+<head>
+	<meta chrset = "UTF-8">
+	<title>socket tent</title>
+	<script src = "socket.io/socket.io.js"></script>
+	<script src = "lib/p5.js" type = "text/javascript"></script>
+	<script src = "lib/p5.dom.js" type = "text/javascript"></script>
+	<script src = "sketch.js" type = "text/javascript"></script>
+	<link rel = "stylesheet" type="text/css" href="css/layout.css"/>
+</head>
+
+
+<body>
+	<div id = "wrapper">
+		
+		 <div id="header">
+			 <p>THIS IS THE TITLE/LOGO</p>
+		 </div>
+		 
+		 <div id = "content">
+			
+			<div id = "main_content">
+				
+			</div>
+			
+			<div id = "sidebar">
+				<div id = "sideTitle">
+					<p id = "titleside"> Configuration Car</p>
+				</div>
+				
+				<div id = "sideslider">
+					<p id = "labelp">Speed
+					<input id = "sld" type = "range" min = "0" max ="30" value="0" onchange="rangeValue.value = value"/>
+					<output id="rangeValue">0</output>
+					</p>
+				</div>
+				
+				<div id = "checkbox">
+						<p id = "labelp">Backwards<input type = "checkbox" id = "sw" class = "toogle-switch"></p>
+				</div>
+				
+				<div id = "startButton">
+					<button class="button" id = "bstart"><span>start</span></button>
+				</div>
+				
+				<div id = "stopButton">
+					<button class="button" id = "bstop"><span>stop</span></button>
+				</div>
+				
+			</div>
+			
+			<div class = "clear">
+			</div>
+			
+		 </div>
+		 
+		 <div id = "footer">
+			 <p>THIS IS MY FOOTER</p>
+		 </div>
+		 
+	</div>
+		
+</body>
+
+</html>
