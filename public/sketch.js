@@ -1,4 +1,4 @@
-
+// valores de rho correspondentes ao theta.
 var y = [
    0.184545986438579,
    0.184276786088046,
@@ -364,7 +364,7 @@ var y = [
 ];
 
 
-
+// angulos retirados
 var x = [
    -3.1416,
    -3.1241,
@@ -730,7 +730,7 @@ var x = [
 ];
 
 
-
+var tout = 0; // timeout
 var mlat = 40.634159099;
 var mlg = -8.6600008;
 var socket;
@@ -740,16 +740,25 @@ var check;
 var rvalue;
 var cnv;
 var teta = 0;
+// data to send para o veículo
 var dataSend = {
 	speed:0,
 	sent:1,
 };
 
-var carstats = { velc: 0,sent:1, lat:0 ,lg:0,h:0,m:0,s:0,gpspd:0,gpst:0,gpsQ:0};
+//Estado para o veículo.
+var carstats = { velc:10,sent:1, lat:40.634171,lg:-8.66,h:0,m:0,s:0,gpspd:0,gpst:5,bat:61};
 var z = 0;
+//tamnho do caanvas.
 var w = 700;
 var h = 700;
 function setup(){
+	// load as imagens retiradas.
+	img = loadImage("direction.png");
+	img2 = loadImage("battery.png");
+	img3 = loadImage("wifi.png");
+	img4 = loadImage("no-wifi.png");
+	img5 = loadImage("placeholder.png");
 	btstop = select('#bstop');
 	btstart = select('#bstart');
 	rvalue = select('#rangeValue');
@@ -758,6 +767,8 @@ function setup(){
 	slide = select('#sld');
 	check = select('#sw');
 	
+
+
 	socket = io.connect('192.168.137.50:3000');
 	socket.on('rcvRF',function(msg){
 		var int8view = new Uint8Array(msg);
@@ -770,39 +781,71 @@ function setup(){
 		carstats.s = int8view[16];
 		carstats.gpspd = int8view[17];
 		carstats.gpst = int8view[18];
-		carstats.gpsQ = int8view[19];
+		carstats.bat = int(int8view[19]);
 		
 
 		carstats.lat = (carstats.lat/100000000)+40;
 		carstats.lg = (carstats.lg/100000000)*(-1)-8;	
-	
+		tout = 0;
 		
-		teta =atan2((carstats.lg-mlg),(carstats.lat-mlat));
-		console.log(carstats.lat + " " + carstats.lg + " " + carstats.gpst + " " + carstats.gpsQ + "  " + teta*180/PI + " " + carstats.gpspd+ " " + carstats.sent);
+		teta =atan2((carstats.lg-mlg),(carstats.lat-mlat)); // cálculo do angulo.
+		console.log(carstats.lat + " " + carstats.lg + " " + carstats.gpst + " "  + "  " + teta*180/PI + " " + carstats.gpspd+ " " + carstats.sent);
 			
 	});
+	socket.on('timeout',function(){
+			tout=1;
+		});
 	 
 	
 	cnv=createCanvas(w,h);
 	cnv.parent('#main_content');
 	
-	
 }
 
 function draw(){
-	background(192);
+	background(238);
+	stroke(0,61,110);
 	translate(350,350);
+	line(-350,-350,-350,350);
+	
 	
 	//noStroke();
 	textSize(100);
-	fill(255);
+	fill(0,61,110);
+	strokeWeight(2);
 	textAlign(CENTER);
 
+
+	image(img,-17,-150);
+
 	text(carstats.velc,0,0);
-	fill(255);
+	fill(0,61,110);
+	strokeWeight(2);
 	textSize(25);
-	text("km/h",0,50);
+	text("km/h",0,30);
 	
+	image(img5,-60,50);
+	strokeWeight(1);
+	textSize(15);
+	if(carstats.gpst == 1)
+		text("SPS",0,75);
+	else if(carstats.gpst ==2)
+		text("DGPS",0,75);
+	else if(carstats.gpst ==4)
+		text("RTK",0,75);
+	else if(carstats.gpst ==5)
+		text("FRTK",0,75);
+	else
+		text("NONE",0,75);
+		
+		
+	image(img2,-60,90);
+		text(carstats.bat,0,115);
+		text("V",15,115);
+		if(tout == 1)
+			image(img4,-15,140);
+		else
+			image(img3,-15,140);
 	
 	fill(255);
 	printCircuit();
@@ -816,16 +859,17 @@ function draw(){
 function printCar(){
 	
 	 strokeWeight(5);
+	 fill(226,21,47);
 	var k  = 0;
 	for(k = 0; k<y.length; k++)
 	{
 		if(x[k]>teta)
 		{
-		arc(y[k]*cos(x[k])*1200,y[k]*sin(x[k])*1200,20,20,0,2*PI);
+		arc(y[k]*cos(x[k]-PI/2 )*1200,y[k]*sin(x[k]-PI/2)*1200,20,20,0,2*PI);
 		break;
 		}
 	}
-//	console.log(teta);
+	//console.log(teta);
 //	console.log(x[i]);
 	//arc(y[k]*cos(x[k]*180/PI)*1200,y[k]*sin(x[k]*180/PI)*1200,20,20,0,2*PI);
 	//console.log("x :" + y[i]*cos(x[i]*180/PI)*1200);
@@ -841,7 +885,7 @@ function printCircuit(){
 	var j = 0;
 	strokeWeight(10);
 	for(j ; j<x.length-1 ; j++)
-		line(y[j]*cos(x[j])*1200,y[j]*sin(x[j])*1200,y[j+1]*cos(x[j+1])*1200,y[j+1]*sin(x[j+1])*1200);
+		line(y[j]*cos(x[j]-PI/2)*1200,y[j]*sin(x[j]-PI/2)*1200,y[j+1]*cos(x[j+1]-PI/2)*1200,y[j+1]*sin(x[j+1]-PI/2)*1200);
 }
 
 

@@ -15,7 +15,7 @@
 	<div id = "wrapper">
 		
 		 <div id="header">
-			 <p>THIS IS THE TITLE/LOGO</p>
+				<img src="titulo.png" alt = "tit" style = "width:900px; height:200px;">
 		 </div>
 		 
 		 <div id = "content">
@@ -26,26 +26,27 @@
 			
 			<div id = "sidebar">
 				<div id = "sideTitle">
-					<p id = "titleside"> Configuration Car</p>
+					<p id = "titleside"> Configuração do veículo</p>
 				</div>
 				
 				<div id = "sideslider">
-					<p id = "labelp">Speed
+					<p id = "label" class = "lab">Velocidade</p>
 					<input id = "sld" type = "range" min = "0" max ="30" value="0" onchange="rangeValue.value = value"/>
 					<output id="rangeValue">0</output>
-					</p>
+					
 				</div>
 				
 				<div id = "checkbox">
-						<p id = "labelp">Backwards<input type = "checkbox" id = "sw" class = "toogle-switch"></p>
+						<p id = "labelp" class = "lab">Inversão do Sentido</p>
+						<p id = "off" >OFF</p><input type = "checkbox" id = "sw" class = "toogle-switch"><p id = "ON">ON</p>
 				</div>
 				
 				<div id = "startButton">
-					<button class="button" id = "bstart"><span>start</span></button>
+					<button class="button" id = "bstart"><span>Start</span></button>
 				</div>
 				
 				<div id = "stopButton">
-					<button class="button" id = "bstop"><span>stop</span></button>
+					<button class="button" id = "bstop"><span>Stop</span></button>
 				</div>
 				
 			</div>
@@ -54,10 +55,7 @@
 			</div>
 			
 		 </div>
-		 
-		 <div id = "footer">
-			 <p>THIS IS MY FOOTER</p>
-		 </div>
+	
 		 
 	</div>
 		

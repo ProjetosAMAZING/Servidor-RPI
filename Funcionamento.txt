@@ -1,0 +1,5 @@
+Para ativar este programa é necessário instalar a última versão do Node JS no RPI.
+
+Para correr o programa apenas é necessário colocar na linha de comandos:
+
+- node index.js 
